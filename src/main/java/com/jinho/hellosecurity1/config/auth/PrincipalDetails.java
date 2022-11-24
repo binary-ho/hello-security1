@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 // 로그인 진행이 완료되면 시큐리티 session을 만들어 줍니다. (Security ContextHolder)
 // 오브젝트 => Authentication 타입 객체
 // Authentication 안에 User 정보가 있어야함
