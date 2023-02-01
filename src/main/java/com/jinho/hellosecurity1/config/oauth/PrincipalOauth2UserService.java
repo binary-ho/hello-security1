@@ -18,8 +18,10 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         this.memberRepository = memberRepository;
     }
 
-    /* TODO: 구글로 부터 받은
+    /* 구글로 부터 받은
         userRequest 데어터에 대한 후처리를 여기에 해준다. */
+    /* loadUser 메서드가 종료되면서 @AuthenticationPrincipal 어노테이션이 만들어 져서
+    * 다른 곳에서 받아볼 수 있게 되는 것이다. */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 //        System.out.println("userRequest = " + userRequest);
@@ -49,6 +51,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                 .build();
 
             memberRepository.save(memberEntity);
+            System.out.println("회원가입해주셔서 감사합니다");
         }
 
         return new PrincipalDetails(memberEntity, oAuth2User.getAttributes());
