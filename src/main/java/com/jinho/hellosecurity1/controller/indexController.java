@@ -1,12 +1,17 @@
 package com.jinho.hellosecurity1.controller;
 
+import com.jinho.hellosecurity1.config.auth.PrincipalDetails;
 import com.jinho.hellosecurity1.model.Member;
 import com.jinho.hellosecurity1.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +23,34 @@ public class indexController {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @GetMapping("/test/oauth/login")
+    public @ResponseBody String testOAuthLogin(
+        Authentication authentication,
+        @AuthenticationPrincipal OAuth2User oauth) {
+        System.out.println("/test/login ===============");
+
+        /* Authentication에서 꺼내어 OAuth2User로 다운 캐스팅해서 접근할 수도 있고,
+        * @AuthenticationPrincipal 어노테이션을 통해서도 접근할 수 있다. */
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        System.out.println("oAuth2User.getAttributes = " + oAuth2User.getAttributes());
+        System.out.println("oauth2User: " + oauth.getAttributes());
+
+        return "OAuth 세션 정보 확인하기";
+    }
+
+    @GetMapping("/test/login")
+    public @ResponseBody String testLogin(
+        Authentication authentication,
+        @AuthenticationPrincipal PrincipalDetails userDetails) {
+        System.out.println("/test/login ===============");
+
+        /* PrincipalDetails는 UserDetails를 implements 했다. */
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        System.out.println("principalDetails getMember() = " + principalDetails.getMember());
+        System.out.println("userDetails = " + userDetails.getMember());
+        return "세션 정보 확인하기";
+    }
 
     @GetMapping({"", "/"})
     public String index() {
