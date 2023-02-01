@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -21,4 +22,18 @@ public class Member {
     private String role;
     @CreationTimestamp
     private Timestamp createDate;
+    String provider;
+    String providerId;
+
+    @Builder
+    public Member(String username, String password, String email, String role,
+        Timestamp createDate, String provider, String providerId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.createDate = createDate;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
 }
