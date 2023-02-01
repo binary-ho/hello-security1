@@ -75,7 +75,7 @@ public class indexController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ADMIN')")
-    @PostAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ADMIN')")
+//    @PostAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ADMIN')")
     @GetMapping("/data")
     public @ResponseBody
     String data() {
