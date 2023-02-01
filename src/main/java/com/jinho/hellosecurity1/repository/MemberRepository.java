@@ -13,6 +13,5 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     // findBy 규칙 -> Username 문법
     // select * from user where username = 1?
     public Member findByUsername(String username);
-
     public Member findByEmail(String email);
 }
