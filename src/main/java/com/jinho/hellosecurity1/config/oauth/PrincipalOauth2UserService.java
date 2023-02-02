@@ -24,14 +24,14 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     * 다른 곳에서 받아볼 수 있게 되는 것이다. */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-//        System.out.println("userRequest = " + userRequest);
-//        System.out.println("userRequest.getClientRegistration() = " + userRequest.getClientRegistration());
-//        System.out.println("userRequest.getAccessToken() = " + userRequest.getAccessToken());
-//        System.out.println("super.loadUser(userRequest).getAttributes() = " + super.loadUser(userRequest).getAttributes());
+        System.out.println("userRequest = " + userRequest);
+        System.out.println("userRequest.getClientRegistration() = " + userRequest.getClientRegistration());
+        System.out.println("userRequest.getAccessToken() = " + userRequest.getAccessToken());
+        System.out.println("super.loadUser(userRequest).getAttributes() = " + super.loadUser(userRequest).getAttributes());
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String provider = userRequest.getClientRegistration().getClientId(); /* google */
+        String provider = userRequest.getClientRegistration().getRegistrationId(); /* google */
         String providerId = oAuth2User.getAttribute("sub");
         String username = provider + "_" + providerId;
         String password = "password";
