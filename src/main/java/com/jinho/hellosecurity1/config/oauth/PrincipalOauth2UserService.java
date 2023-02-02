@@ -1,6 +1,9 @@
 package com.jinho.hellosecurity1.config.oauth;
 
 import com.jinho.hellosecurity1.config.auth.PrincipalDetails;
+import com.jinho.hellosecurity1.config.oauth.provider.FacebookUserInfo;
+import com.jinho.hellosecurity1.config.oauth.provider.GoogleUserInfo;
+import com.jinho.hellosecurity1.config.oauth.provider.OAuth2UserInfo;
 import com.jinho.hellosecurity1.model.Member;
 import com.jinho.hellosecurity1.repository.MemberRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -29,13 +32,27 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         System.out.println("userRequest.getAccessToken() = " + userRequest.getAccessToken());
         System.out.println("super.loadUser(userRequest).getAttributes() = " + super.loadUser(userRequest).getAttributes());
 
+        // 유저 객체
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String provider = userRequest.getClientRegistration().getRegistrationId(); /* google */
-        String providerId = oAuth2User.getAttribute("sub");
+        OAuth2UserInfo oAuth2UserInfo;
+
+        if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
+            System.out.println("구글 로그인 요청");
+            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
+            oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        } else {
+            System.out.println("미지원 소셜 로그인입니다.");
+            oAuth2UserInfo = null;
+        }
+
+
+        String provider = oAuth2UserInfo.getProvider();
+        String providerId = oAuth2UserInfo.getProviderId();
         String username = provider + "_" + providerId;
         String password = "password";
-        String email = oAuth2User.getAttribute("email");
+        String email = oAuth2UserInfo.getEmail();
         String role = "ROLE_USER";
 
         Member memberEntity = memberRepository.findByUsername(username);
